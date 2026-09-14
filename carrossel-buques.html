@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carrossel de Buquês | Floricultura Alecrim</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,500&family=Work+Sans:wght@300;400;500;600;700&family=Caveat:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --verde-alecrim:#1f3a2e;
+  --verde-alecrim-2:#2c4c3b;
+  --sálvia:#7f9b81;
+  --sálvia-clara:#c9d8c4;
+  --papel:#f7f2e7;
+  --creme:#fffdf8;
+  --rosa:#c5294f;
+  --rosa-clara:#f3dde1;
+  --tinta:#20281f;
+  --tinta-suave:#4a5245;
+  --sombra: 0 18px 40px -20px rgba(31,58,46,.35);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--papel);
+  color:var(--tinta);
+  font-family:'Work Sans',sans-serif;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:100vh;
+  padding:40px 16px;
+}
+h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;color:var(--verde-alecrim);}
+.script{font-family:'Caveat',cursive;font-weight:600;}
+
+.carousel-wrap{
+  width:100%;
+  max-width:480px;
+}
+.carousel-head{
+  text-align:center;
+  margin-bottom:22px;
+}
+.carousel-head .eyebrow{
+  font-family:'Caveat',cursive;
+  font-size:1.3rem;
+  color:var(--rosa);
+  font-weight:700;
+}
+.carousel-head .eyebrow::before{content:"❧ ";color:var(--sálvia);}
+.carousel-head h1{font-size:1.7rem;}
+
+.carousel{
+  position:relative;
+  background:var(--creme);
+  border-radius:26px;
+  box-shadow:var(--sombra);
+  overflow:hidden;
+}
+.track{
+  display:flex;
+  transition:transform .5s cubic-bezier(.65,0,.35,1);
+}
+.slide{
+  min-width:100%;
+  display:flex;
+  flex-direction:column;
+}
+.slide .imgwrap{
+  aspect-ratio:1/1;
+  overflow:hidden;
+  position:relative;
+  background:var(--sálvia-clara);
+}
+.slide .imgwrap img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.slide .price-tag{
+  position:absolute;
+  top:16px;
+  right:16px;
+  background:rgba(255,253,248,.94);
+  color:var(--rosa);
+  font-weight:700;
+  font-size:.95rem;
+  padding:7px 16px;
+  border-radius:100px;
+  font-family:'Fraunces',serif;
+  box-shadow:0 8px 18px -8px rgba(31,58,46,.3);
+}
+.slide .body{
+  padding:22px 26px 26px;
+  text-align:center;
+}
+.slide h3{font-size:1.2rem;margin-bottom:8px;line-height:1.3;}
+.slide p{font-size:.92rem;color:var(--tinta-suave);margin:0;line-height:1.5;}
+
+.nav-btn{
+  position:absolute;
+  top:calc(50% - 60px);
+  transform:translateY(-50%);
+  background:rgba(255,253,248,.9);
+  border:none;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  color:var(--verde-alecrim);
+  box-shadow:0 10px 22px -10px rgba(31,58,46,.4);
+  transition:background .25s ease, transform .2s ease;
+  z-index:5;
+}
+.nav-btn:hover{background:var(--verde-alecrim);color:#fff;}
+.nav-btn:active{transform:translateY(-50%) scale(.92);}
+.nav-btn.prev{left:14px;}
+.nav-btn.next{right:14px;}
+.nav-btn svg{width:20px;height:20px;}
+
+.counter{
+  text-align:center;
+  margin-top:16px;
+  font-family:'Fraunces',serif;
+  font-style:italic;
+  color:var(--tinta-suave);
+  font-size:.9rem;
+}
+
+.dots{
+  display:flex;
+  justify-content:center;
+  gap:7px;
+  margin-top:14px;
+  flex-wrap:wrap;
+  max-width:100%;
+}
+.dots button{
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  border:none;
+  background:var(--sálvia-clara);
+  cursor:pointer;
+  padding:0;
+  transition:background .25s ease, transform .25s ease;
+}
+.dots button.active{
+  background:var(--rosa);
+  transform:scale(1.3);
+}
+
+@media(max-width:520px){
+  .nav-btn{width:38px;height:38px;}
+  .nav-btn svg{width:16px;height:16px;}
+  .slide .body{padding:18px 20px 22px;}
+  .slide h3{font-size:1.05rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="carousel-wrap">
+  <div class="carousel-head">
+    <div class="eyebrow">nossa seleção completa</div>
+    <h1>Passe e conheça nossos buquês</h1>
+  </div>
+
+  <div class="carousel">
+    <div class="track" id="track"></div>
+    <button class="nav-btn prev" id="prevBtn" aria-label="Anterior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+    </button>
+    <button class="nav-btn next" id="nextBtn" aria-label="Próximo">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
+    </button>
+  </div>
+
+  <div class="counter" id="counter"></div>
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+const PRODUCTS = [
+  {n:"Buquê Luxo com Rosas Vermelhas", d:"Buquê grande de rosas vermelhas importadas com folhagem ruscus.", p:410, img:"buque-20.jpg"},
+  {n:"Buquê Personalizado", d:"Rosas brancas, astromélia branca e botões verdes, com folhagem.", p:270, img:"buque-09.jpg"},
+  {n:"Buquê com Rosas Pink Importadas", d:"Rosas pink importadas, alstroemeria e gipsófila.", p:250, img:"buque-02.jpg"},
+  {n:"Buquê com Girassol e Rosas Vermelhas", d:"Rosas vermelhas importadas, girassol, gipsófila, astromélias e folhagem.", p:250, img:"buque-22.jpg"},
+  {n:"Buquê com Rosas Coloridas", d:"Rosas vermelhas, pink, amarelas e brancas, com astromélia e gipsófila.", p:250, img:"buque-24.jpg"},
+  {n:"Buquê de Girassóis", d:"Girassóis, astromélia branca e folhagem.", p:250, img:"buque-27.jpg"},
+  {n:"Buquê Misto Colorido", d:"Girassol, gérberas coloridas, flor do campo e rosas coloridas.", p:220, img:"buque-04.jpg"},
+  {n:"Buquê com Rosas Lilás Importadas", d:"Rosas lilás importadas, alstroemeria cor de rosa e gipsófila.", p:210, img:"buque-01.jpg"},
+  {n:"Buquê com Lírio Pink", d:"Lírio pink e gipsófila, com folhagem.", p:190, img:"buque-26.jpg"},
+  {n:"Buquê com Lírio Branco", d:"Lírio branco e gipsófila, com folhagem.", p:180, img:"buque-19.jpg"},
+  {n:"Buquê com Copo-de-Leite Roxo e Girassol", d:"Copo-de-leite roxo, girassol, rosas lilás e folhagem.", p:180, img:"buque-21.jpg"},
+  {n:"Buquê de Flores do Campo Coloridas", d:"Crisântemos e margaridas em tons variados, astromélia laranja e flores do campo.", p:180, img:"buque-18.jpg"},
+  {n:"Buquê com 6 Rosas Vermelhas Importadas", d:"Rosas vermelhas importadas, astromélia branca e flores de acabamento.", p:175, img:"buque-08.jpg"},
+  {n:"Buquê com Rosas Amarelas e Brancas", d:"Rosas amarelas, rosas brancas, astromélia e gipsófila.", p:175, img:"buque-29.jpg"},
+  {n:"Buquê com Lírio Pink e Rosas Lilás", d:"Lírio pink, rosas lilás, statice e lisianthus cor de rosa.", p:160, img:"buque-05.jpg"},
+  {n:"Buquê com 5 Rosas Vermelhas Importadas", d:"Rosas vermelhas importadas com gipsófila e folhagem.", p:160, img:"buque-03.jpg"},
+  {n:"Buquê de Flores do Campo", d:"Mix de crisântemos, margaridas e flores do campo em tons variados.", p:145, img:"buque-23.jpg"},
+  {n:"Mini Buquê de Flores do Campo", d:"Crisântemos amarelos, brancos e roxos, gérberas terracota e folhagem.", p:120, img:"buque-34.jpg"},
+  {n:"Cone com Rosas e Kinder Bueno", d:"Rosas vermelhas importadas, eucalipto e chocolate Kinder Bueno.", p:120, img:"buque-28.jpg"},
+  {n:"Arranjo com Lírio Cor de Rosa", d:"Lírio cor de rosa, flores boca-de-leão, mini rosa e eucaflor.", p:130, img:"buque-14.jpg"},
+  {n:"Cone Craft com Rosas Vermelhas", d:"Rosas vermelhas importadas em cone craft, com folhagem.", p:130, img:"buque-10.jpg"},
+  {n:"Cone Especial com Girassol e Chocolate", d:"Girassol, rosas vermelhas importadas, margaridas e chocolates Ferrero Rocher.", p:150, img:"buque-11.jpg"},
+  {n:"Cone Especial com Rosas Vermelhas", d:"Rosas vermelhas importadas e gipsófila, cone \"Especial para Você\".", p:100, img:"buque-35.jpg"},
+  {n:"Mini Arranjo com Rosas e Ferrero Rocher", d:"Rosas vermelhas importadas, astromélias amarelas, folhagem e Ferrero Rocher.", p:110, img:"buque-16.jpg"},
+  {n:"Arranjo com Girassol e Statice", d:"Girassol, statice, eucaflor e folhagem.", p:110, img:"buque-06.jpg"},
+  {n:"Arranjo com Rosas Pink e Gérberas", d:"Rosas pink e gérberas cor de rosa.", p:110, img:"buque-07.jpg"},
+  {n:"Girassol com Rosa Azul", d:"Girassol, rosa azul e gipsófila azul.", p:95, img:"buque-32.jpg"},
+  {n:"Arranjo com Girassol", d:"Girassóis, astromélia e gipsófila com folhagem.", p:90, img:"buque-12.jpg"},
+  {n:"Mini Arranjo com Rosas Pink Importadas", d:"Rosas pink importadas, alstroemeria branca e gipsófila.", p:85, img:"buque-13.jpg"},
+  {n:"Arranjo com Rosas Pink Importadas", d:"Rosas pink importadas, astromélia branca e gipsófila.", p:85, img:"buque-25.jpg"},
+  {n:"Cone com Rosa e Ferrero Rocher", d:"Rosa vermelha importada, eucalipto e chocolates Ferrero Rocher.", p:45, img:"buque-17.jpg"},
+  {n:"Cone com Girassol Unitário", d:"Girassol único com astromélia amarela e folhagem, em cone craft.", p:45, img:"buque-31.jpg"},
+  {n:"Cone com Rosa e Sonho de Valsa", d:"Rosa vermelha importada, gipsófila e chocolate Sonho de Valsa.", p:35, img:"buque-33.jpg"},
+  {n:"Rosa Solteira Importada", d:"Botão de rosa vermelha importada, com trigo decorativo.", p:15, img:"buque-15.jpg"},
+  {n:"Rosa Solteira Enfeitada", d:"Rosa individual enfeitada com trigo decorativo, disponível em várias cores.", p:15, img:"buque-30.jpg"},
+  {n:"Buquê de Flores do Campo com Girassol e Lírio", d:"Flores do campo, alstroemérias, girassol, rosa e lírio.", p:280, img:"buque-36.jpg"},
+  {n:"Arranjo para Hall de Entrada", d:"Orquídea, ripsális e mini zamioculcas, em cachepô de aço inox.", p:null, img:"buque-37.jpg"},
+  {n:"Buquê Misto com Rosas e Girassol", d:"Rosas vermelhas importadas, girassol e margaridas brancas.", p:250, img:"buque-38.jpg"},
+  {n:"Mini Arranjo com Rosa Pink e Alstroemélia", d:"Rosa importada pink, alstroemélia branca e tango.", p:110, img:"buque-39.jpg"},
+  {n:"Buquê de Lírios Brancos e Tulipas", d:"Lírios brancos e tulipas.", p:330, img:"buque-40.jpg"},
+  {n:"Buquê Misto de Gérberas e Pinóquio", d:"Gérberas e Pinóquio em tons variados.", p:360, img:"buque-41.jpg"},
+  {n:"Buquê de Rosas Importadas Vermelhas", d:"Rosas importadas vermelhas.", p:160, img:"buque-42.jpg"},
+  {n:"Buquê de Rosas Pink com Alstroemélia", d:"Rosas pink importadas, alstroemélia rosa e gipsófila.", p:100, img:"buque-43.jpg"},
+  {n:"Mini Arranjo com Gérbera, Papel Craft", d:"Gérbera e alstroemélia, embalagem em papel craft.", p:70, img:"buque-44.jpg"},
+  {n:"Buquê de Lírio Rosa e Goivo", d:"Lírio rosa, goivo rosa e eucalipto.", p:120, img:"buque-45.jpg"},
+  {n:"Buquê com Girassol e Statice", d:"Girassol, ruscus e statice.", p:90, img:"buque-46.jpg"},
+  {n:"Mini Arranjo com Rosa e Pinóquio Amarelo", d:"Rosa vermelha importada e Pinóquio amarelo.", p:95, img:"buque-47.jpg"},
+  {n:"Buquê Misto de Flores do Campo", d:"Flores do campo em tons variados.", p:120, img:"buque-48.jpg"},
+  {n:"Buquê de Flores do Campo Silvestre", d:"Flores do campo silvestres, coloridas.", p:150, img:"buque-49.jpg"},
+  {n:"Rosa Vermelha Importada Unitária", d:"Rosa vermelha importada, com trigo decorativo.", p:15, img:"buque-50.jpg"},
+  {n:"Buquê Misto com Rosa e Girassol", d:"Flores do campo coloridas, rosa e girassol.", p:220, img:"buque-51.jpg"},
+  {n:"Buquê com Rosa Inglesa e Flores do Campo", d:"Rosa inglesa e flores do campo coloridas.", p:150, img:"buque-52.jpg"},
+  {n:"Buquê com Gérbera e Tango", d:"Gérbera e tango.", p:120, img:"buque-53.jpg"},
+  {n:"Buquê de Flores do Campo e Gérberas", d:"Flores do campo e gérberas.", p:180, img:"buque-54.jpg"},
+  {n:"Buquê de Rosa Azul e Alstroemélia", d:"Rosa azul, alstroemélias brancas e gipsófila.", p:180, img:"buque-55.jpg"},
+  {n:"Mini Arranjo com Rosas Vermelhas Importadas", d:"Rosas vermelhas importadas e alstroemélia branca.", p:75, img:"buque-56.jpg"},
+  {n:"Buquê de Rosa Vermelha Importada (24 unidades)", d:"Buquê com 24 rosas vermelhas importadas.", p:390, img:"buque-57.jpg"},
+  {n:"Buquê de Girassol com Rosas e Alstroemélia", d:"Girassol, rosas vermelhas e alstroemélia amarela, papel craft.", p:250, img:"buque-58.jpg"},
+  {n:"Mini Arranjo com Rosas Pink e Alstroemélia", d:"Rosas pink importadas e alstroemélias.", p:100, img:"buque-59.jpg"},
+  {n:"Arranjo de Rosa Amarela e Alstroemélia", d:"Rosa amarela e alstroemélia branca.", p:320, img:"buque-60.jpg"},
+  {n:"Buquê de Hortênsia, Lírio e Pinóquio", d:"Hortênsia, lírio, goivo e Pinóquio amarelo.", p:360, img:"buque-61.jpg"},
+  {n:"Arranjo Composto com Orquídea e Calas", d:"Orquídea, calas, mini antúrio e grapete.", p:350, img:"buque-62.jpg"},
+  {n:"Mini Buquê Flores do Campo \"Bailarina\"", d:"Flores do campo coloridas, estilo bailarina.", p:60, img:"buque-63.jpg"},
+  {n:"Buquê \"Bailarina\" com Ursinho", d:"Flores do campo com ursinho de pelúcia \"Amor\".", p:160, img:"buque-64.jpg"},
+  {n:"Mini Buquê de Rosa Azul Importada", d:"Rosa azul importada com alstroemélia branca.", p:105, img:"buque-65.jpg"},
+  {n:"Mini Arranjo com Rosas Vermelhas Importadas", d:"Rosas vermelhas importadas.", p:90, img:"buque-66.jpg"},
+  {n:"Arranjo Composto Orquídea e Antúrio", d:"Orquídea e antúrio, em bacia de louça.", p:235, img:"buque-67.jpg"},
+  {n:"Arranjo com Mini Suculentas e Orquídea", d:"Mini suculentas e mini orquídea, em peça de louça.", p:190, img:"buque-68.jpg"},
+  {n:"Arranjo Composto Orquídeas, Antúrio e Bromélia", d:"Orquídeas, antúrio, bromélia e grapete.", p:490, img:"buque-69.jpg"},
+  {n:"Buquê Misto com Gérbera, Lírio e Girassol", d:"Gérbera, lírio, girassol e rosa.", p:250, img:"buque-70.jpg"},
+  {n:"Arranjo Composto com Orquídea e Espumante", d:"Orquídea, lírio, chocolate, espumante e taça, em cachepô de taboa.", p:390, img:"buque-71.jpg"},
+  {n:"Arranjo com Orquídeas e Bromélia", d:"Orquídeas, bromélia e grapete, com cachepô.", p:290, img:"buque-72.jpg"},
+  {n:"Arranjo com Chocolate e Ursinho", d:"Chocolate Ferrero Rocher, ursinho de pelúcia e mini orquídea.", p:210, img:"buque-73.jpg"},
+  {n:"Coração de Chocolate com Ursinho", d:"Coração de chocolate com ursinho de pelúcia.", p:150, img:"buque-74.jpg"},
+  {n:"Arranjo com Chocolate e Ursinho de Pelúcia", d:"Chocolate e ursinho de pelúcia.", p:220, img:"buque-75.jpg"},
+  {n:"Arranjo com Espumante, Chocolate e Ursinho", d:"Espumante, chocolate e ursinho de pelúcia.", p:225, img:"buque-76.jpg"},
+  {n:"Arranjo com Mini Orquídea e Cerveja", d:"Mini orquídea, cerveja e amendoim, em cachepô de taboa.", p:150, img:"buque-77.jpg"},
+  {n:"Arranjo para Centro de Mesa com Orquídea", d:"Cachepô de vidro com mini orquídea e grapete.", p:220, img:"buque-78.jpg"},
+  {n:"Ursinho de Pelúcia com Chocolate", d:"Ursinho de pelúcia com chocolate Ferrero Rocher.", p:135, img:"buque-79.jpg"},
+  {n:"Arranjo com Orquídea, Ursinho e Chocolate", d:"Orquídea, ursinho de pelúcia e chocolate.", p:260, img:"buque-80.jpg"},
+  {n:"Arranjo Composto com Vinho e Rosas", d:"Vinho tinto, chocolate, taça e rosas vermelhas importadas.", p:250, img:"buque-81.jpg"},
+  {n:"Arranjo com Rosa e Boca-de-Leão", d:"Rosa, boca-de-leão e gipsófila.", p:200, img:"buque-82.jpg"},
+  {n:"Cachepô de Coração com Chocolate", d:"Chocolate, ursinho de pelúcia e caneca, em cachepô de coração.", p:220, img:"buque-83.jpg"},
+  {n:"Arranjo com Orquídeas e Gérbera", d:"Orquídeas, gérbera e calandiva.", p:250, img:"buque-84.jpg"},
+  {n:"Arranjo com Begônia, Chocolate e Balão", d:"Begônia, chocolate, ursinho de pelúcia e balão.", p:280, img:"buque-85.jpg"},
+  {n:"Arranjo Composto com Vinho e Ursinho", d:"Vinho, chocolate, taça, ursinho e rosas vermelhas importadas.", p:350, img:"buque-86.jpg"},
+  {n:"Arranjo com Vinho, Chocolate e Ursinho", d:"Vinho, taça, chocolate, rosas vermelhas importadas e ursinho.", p:250, img:"buque-87.jpg"},
+  {n:"Buquê de Alstroemélia e Boca-de-Leão", d:"Alstroemélia colorida e boca-de-leão.", p:180, img:"buque-88.jpg"},
+  {n:"Cesta de Café da Manhã", d:"Cesta de café da manhã com begônias.", p:300, img:"buque-89.jpg"},
+  {n:"Arranjo de Girassol e Rosas Coloridas", d:"Girassol e rosas coloridas.", p:160, img:"buque-90.jpg"},
+  {n:"Rosa Importada no Tubo", d:"Rosa importada, apresentada em tubo com dedicatórias.", p:35, img:"buque-91.jpg"},
+  {n:"Arranjo com Girassol", d:"Buquê de girassóis.", p:85, img:"buque-92.jpg"},
+  {n:"Arranjo de Rosas Vermelhas Importadas", d:"Rosas vermelhas importadas.", p:140, img:"buque-93.jpg"},
+  {n:"Buquê Misto de Gérbera e Rosas", d:"Gérbera, rosas e flores do campo.", p:220, img:"buque-94.jpg"},
+  {n:"Arranjo Composto com Mini Jiboia e Orquídea", d:"Mini jiboia, bromélia e orquídea, em cachepô de taboa.", p:205, img:"buque-95.jpg"},
+  {n:"Arranjo Composto com Orquídeas e Fitônia", d:"Orquídeas, fitônia, bromélia, tilândsia e mini antúrio, em peça de louça.", p:398, img:"buque-96.jpg"},
+  {n:"Arranjo com Begônia e Chocolates", d:"Begônia, xícara, chocolates e bolachas.", p:260, img:"buque-97.jpg"},
+  {n:"Girassol no Cachepô Craft", d:"Girassol único, em cachepô craft.", p:50, img:"buque-98.jpg"},
+  {n:"Arranjo com Orquídeas e Palmeira", d:"Orquídeas, fitônia, palmeira chamaedorea, suculenta e mini antúrio.", p:275, img:"buque-99.jpg"},
+  {n:"Arranjo com Orquídeas e Dracena", d:"Orquídeas e dracena, em peça de louça.", p:360, img:"buque-100.jpg"},
+  {n:"Arranjo Composto com Orquídeas e Folhagem", d:"Orquídeas e folhagem, em cachepô de fibra.", p:240, img:"buque-101.jpg"},
+  {n:"Arranjo no Vidro com Orquídeas", d:"Orquídeas e antúrio, em vaso de vidro.", p:170, img:"buque-102.jpg"},
+  {n:"Arranjo no Vidro com Orquídeas e Bromélia", d:"Orquídeas, bromélia e mini antúrio.", p:220, img:"buque-103.jpg"},
+  {n:"Cesta de Café da Manhã com Rosas", d:"Cesta de café da manhã com rosas.", p:300, img:"buque-104.jpg"},
+  {n:"Cesta de Café da Manhã Colorida", d:"Cesta de café da manhã com flores coloridas.", p:280, img:"buque-105.jpg"},
+  {n:"Kokedama", d:"Kokedama de folhagem.", p:70, img:"buque-106.jpg"},
+  {n:"Mini Orquídea no Vidro", d:"Mini orquídea, em vaso de vidro.", p:80, img:"buque-107.jpg"},
+  {n:"Rosa Unitária Preta", d:"Rosa preta unitária.", p:25, img:"buque-108.jpg"},
+  {n:"Arranjo com Chocolate e Espumante", d:"Chocolate, espumante, rosas importadas e taça, em caixa vitrine.", p:215, img:"buque-109.jpg"},
+  {n:"Cachepô \"Te Amo\" com Ursinho", d:"Ursinho, vinho, chocolate e rosa.", p:235, img:"buque-110.jpg"},
+  {n:"Kokedama de Folhagem", d:"Kokedama de folhagem vermelha (cordyline).", p:70, img:"buque-111.jpg"},
+  {n:"Kokedama de Mini Orquídea", d:"Kokedama de mini orquídea.", p:60, img:"buque-112.jpg"},
+  {n:"Kokedama de Samambaia", d:"Kokedama de asplênio pavate (samambaia).", p:60, img:"buque-113.jpg"},
+  {n:"Kokedama de Ardísia", d:"Kokedama de ardísia, com bagas vermelhas.", p:60, img:"buque-114.jpg"},
+  {n:"Mini Arranjo com Rosa e Chocolate", d:"Rosa vermelha, margaridas brancas e chocolate.", p:60, img:"buque-115.jpg"},
+  {n:"Arranjo com Espumante e Mini Orquídea", d:"Espumante, chocolate, mini orquídea e taça.", p:245, img:"buque-116.jpg"},
+  {n:"Mini Arranjo \"Especial para Você\"", d:"Girassol, rosas vermelhas e chocolate.", p:120, img:"buque-117.jpg"},
+  {n:"Arranjo com Girassol e Rosa Azul", d:"Girassol e rosa azul.", p:70, img:"buque-118.jpg"},
+  {n:"Arranjo com Girassol e Nutella", d:"Girassol, chocolate e Nutella.", p:150, img:"buque-119.jpg"},
+  {n:"Coração de Pelúcia com Chocolate", d:"Coração de pelúcia com chocolate e espumante.", p:225, img:"buque-120.jpg"},
+  {n:"Caixa com Rosas e Chocolate", d:"Rosas vermelhas importadas, chocolate e almofada de coração.", p:210, img:"buque-121.jpg"},
+];
+
+function money(v){
+  return v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
+}
+
+const track = document.getElementById('track');
+const dotsWrap = document.getElementById('dots');
+const counter = document.getElementById('counter');
+let index = 0;
+
+track.innerHTML = PRODUCTS.map(p => `
+  <div class="slide">
+    <div class="imgwrap">
+      <img src="assets/${p.img}" alt="${p.n} - Floricultura Alecrim" loading="lazy">
+      <div class="price-tag">${p.p === null ? 'Sob consulta' : 'R$ ' + money(p.p)}</div>
+    </div>
+    <div class="body">
+      <h3>${p.n}</h3>
+      <p>${p.d}</p>
+    </div>
+  </div>
+`).join('');
+
+// dots limited/grouped visually if too many — keep simple thin dots
+dotsWrap.innerHTML = PRODUCTS.map((_, i) => `<button data-i="${i}" aria-label="Ir para item ${i+1}"></button>`).join('');
+const dotButtons = dotsWrap.querySelectorAll('button');
+
+function update(){
+  track.style.transform = `translateX(-${index * 100}%)`;
+  counter.textContent = `${index + 1} / ${PRODUCTS.length}`;
+  dotButtons.forEach((b, i) => b.classList.toggle('active', i === index));
+  dotButtons[index].scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
+}
+
+function goTo(i){
+  index = (i + PRODUCTS.length) % PRODUCTS.length;
+  update();
+}
+
+document.getElementById('nextBtn').addEventListener('click', () => goTo(index + 1));
+document.getElementById('prevBtn').addEventListener('click', () => goTo(index - 1));
+dotButtons.forEach(b => b.addEventListener('click', () => goTo(Number(b.dataset.i))));
+
+// swipe support
+let startX = 0;
+track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive:true});
+track.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - startX;
+  if (dx > 50) goTo(index - 1);
+  else if (dx < -50) goTo(index + 1);
+}, {passive:true});
+
+// keyboard support
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight') goTo(index + 1);
+  if (e.key === 'ArrowLeft') goTo(index - 1);
+});
+
+update();
+</script>
+</body>
+</html>
