@@ -324,7 +324,7 @@ let index = 0;
 track.innerHTML = PRODUCTS.map(p => `
   <div class="slide">
     <div class="imgwrap">
-      <img src="assets/${p.img}" alt="${p.n} - Floricultura Alecrim" loading="lazy">
+      <img src="${p.img}" alt="${p.n} - Floricultura Alecrim" loading="lazy">
       <div class="price-tag">${p.p === null ? 'Sob consulta' : 'R$ ' + money(p.p)}</div>
     </div>
     <div class="body">
