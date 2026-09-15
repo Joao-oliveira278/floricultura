@@ -20,148 +20,236 @@
   --tinta:#20281f;
   --tinta-suave:#4a5245;
   --sombra: 0 18px 40px -20px rgba(31,58,46,.35);
+  --sombra-forte: 0 26px 60px -22px rgba(31,58,46,.45);
 }
 *{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
 body{
   margin:0;
-  background:var(--papel);
-  color:var(--tinta);
+  background:
+    radial-gradient(ellipse at 18% 12%, rgba(90,130,95,.35), transparent 55%),
+    radial-gradient(ellipse at 85% 88%, rgba(197,41,79,.28), transparent 55%),
+    linear-gradient(155deg, #1a2b20 0%, #16261c 28%, #0f1a14 58%, #1c1410 100%);
+  color:var(--papel);
   font-family:'Work Sans',sans-serif;
   display:flex;
   align-items:center;
   justify-content:center;
   min-height:100vh;
-  padding:40px 16px;
+  min-height:100dvh;
+  padding:clamp(20px,6vw,48px) 16px;
+  padding-top:calc(clamp(20px,6vw,48px) + env(safe-area-inset-top));
+  padding-bottom:calc(clamp(20px,6vw,48px) + env(safe-area-inset-bottom));
 }
 h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;color:var(--verde-alecrim);}
 .script{font-family:'Caveat',cursive;font-weight:600;}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none !important;transition:none !important;}
+}
 
 .carousel-wrap{
   width:100%;
-  max-width:480px;
+  max-width:440px;
 }
 .carousel-head{
   text-align:center;
-  margin-bottom:22px;
+  margin-bottom:clamp(20px,5vw,32px);
 }
 .carousel-head .eyebrow{
-  font-family:'Caveat',cursive;
-  font-size:1.3rem;
-  color:var(--rosa);
-  font-weight:700;
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  font-family:'Work Sans',sans-serif;
+  font-size:.72rem;
+  font-weight:600;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:var(--rosa-clara);
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  padding:7px 16px;
+  border-radius:100px;
+  margin-bottom:16px;
 }
-.carousel-head .eyebrow::before{content:"❧ ";color:var(--sálvia);}
-.carousel-head h1{font-size:1.7rem;}
+.carousel-head .eyebrow::before{content:"❧";color:var(--sálvia-clara);font-size:1em;}
+.carousel-head h1{
+  font-size:clamp(1.5rem,5.6vw,2.1rem);
+  font-style:italic;
+  font-weight:500;
+  line-height:1.22;
+  letter-spacing:-.01em;
+  color:var(--creme);
+  max-width:15em;
+  margin:0 auto;
+  text-wrap:balance;
+}
 
 .carousel{
   position:relative;
   background:var(--creme);
-  border-radius:26px;
-  box-shadow:var(--sombra);
+  border-radius:24px;
+  box-shadow:0 30px 70px -20px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.06);
   overflow:hidden;
+  border:1px solid rgba(255,255,255,.08);
 }
-.track{
-  display:flex;
-  transition:transform .5s cubic-bezier(.65,0,.35,1);
-}
-.slide{
-  min-width:100%;
-  display:flex;
-  flex-direction:column;
-}
-.slide .imgwrap{
+
+/* ---- image stage: fixed square, nav buttons anchor here ---- */
+.stage{
+  position:relative;
   aspect-ratio:1/1;
   overflow:hidden;
-  position:relative;
   background:var(--sálvia-clara);
 }
-.slide .imgwrap img{
+.img-track{
+  display:flex;
+  height:100%;
+  transition:transform .45s cubic-bezier(.65,0,.35,1);
+  will-change:transform;
+}
+.img-slide{
+  min-width:100%;
+  height:100%;
+  position:relative;
+}
+.img-slide img{
   width:100%;
   height:100%;
   object-fit:cover;
   display:block;
+  pointer-events:none;
+  -webkit-user-select:none;
+  user-select:none;
 }
-.slide .price-tag{
+.price-tag{
   position:absolute;
-  top:16px;
-  right:16px;
-  background:rgba(255,253,248,.94);
+  top:14px;
+  right:14px;
+  background:rgba(255,253,248,.95);
+  backdrop-filter:blur(4px);
   color:var(--rosa);
   font-weight:700;
-  font-size:.95rem;
-  padding:7px 16px;
+  font-size:clamp(.82rem,3.2vw,.95rem);
+  padding:6px 14px;
   border-radius:100px;
   font-family:'Fraunces',serif;
-  box-shadow:0 8px 18px -8px rgba(31,58,46,.3);
+  box-shadow:0 8px 18px -8px rgba(31,58,46,.35);
+  z-index:2;
 }
-.slide .body{
-  padding:22px 26px 26px;
-  text-align:center;
+.stage::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top, rgba(21,42,32,.45), transparent 34%);
+  pointer-events:none;
 }
-.slide h3{font-size:1.2rem;margin-bottom:8px;line-height:1.3;}
-.slide p{font-size:.92rem;color:var(--tinta-suave);margin:0;line-height:1.5;}
 
 .nav-btn{
   position:absolute;
-  top:calc(50% - 60px);
+  top:50%;
   transform:translateY(-50%);
-  background:rgba(255,253,248,.9);
+  background:rgba(255,253,248,.92);
   border:none;
-  width:44px;
-  height:44px;
+  width:clamp(36px,10vw,44px);
+  height:clamp(36px,10vw,44px);
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
   cursor:pointer;
   color:var(--verde-alecrim);
-  box-shadow:0 10px 22px -10px rgba(31,58,46,.4);
-  transition:background .25s ease, transform .2s ease;
+  box-shadow:0 10px 22px -10px rgba(0,0,0,.5);
+  transition:background .2s ease, transform .15s ease, opacity .2s ease;
   z-index:5;
 }
 .nav-btn:hover{background:var(--verde-alecrim);color:#fff;}
-.nav-btn:active{transform:translateY(-50%) scale(.92);}
-.nav-btn.prev{left:14px;}
-.nav-btn.next{right:14px;}
-.nav-btn svg{width:20px;height:20px;}
+.nav-btn:active{transform:translateY(-50%) scale(.9);}
+.nav-btn:focus-visible{outline:2px solid var(--rosa);outline-offset:2px;}
+.nav-btn.prev{left:12px;}
+.nav-btn.next{right:12px;}
+.nav-btn svg{width:18px;height:18px;stroke-width:2.4;}
 
-.counter{
+/* ---- caption area: animates height to fit each slide's text ---- */
+.caption-viewport{
+  overflow:hidden;
+  transition:height .35s ease;
+}
+.caption-track{
+  display:flex;
+  transition:transform .45s cubic-bezier(.65,0,.35,1);
+}
+.caption-slide{
+  min-width:100%;
+  padding:24px 28px 26px;
   text-align:center;
-  margin-top:16px;
+}
+.caption-slide h3{
+  font-size:clamp(1.08rem,4.2vw,1.28rem);
+  font-weight:600;
+  letter-spacing:-.01em;
+  margin-bottom:8px;
+  line-height:1.32;
+  color:var(--verde-alecrim);
+}
+.caption-slide p{
+  font-size:clamp(.85rem,3.3vw,.93rem);
+  font-weight:400;
+  color:var(--tinta-suave);
+  margin:0;
+  line-height:1.6;
+  letter-spacing:.005em;
+}
+
+.meta-row{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:14px;
+  margin-top:20px;
+}
+.counter{
   font-family:'Fraunces',serif;
   font-style:italic;
-  color:var(--tinta-suave);
-  font-size:.9rem;
+  font-weight:500;
+  color:var(--sálvia-clara);
+  font-size:.86rem;
+  letter-spacing:.02em;
+  white-space:nowrap;
+  min-width:60px;
+  text-align:center;
+}
+.progress-track{
+  flex:1;
+  max-width:220px;
+  height:3px;
+  background:rgba(255,255,255,.14);
+  border-radius:100px;
+  overflow:hidden;
+}
+.progress-bar{
+  height:100%;
+  background:linear-gradient(90deg, var(--rosa), var(--rosa-clara));
+  border-radius:100px;
+  transition:width .45s cubic-bezier(.65,0,.35,1);
 }
 
-.dots{
+.dots-hint{
   display:flex;
   justify-content:center;
-  gap:7px;
+  gap:8px;
   margin-top:14px;
-  flex-wrap:wrap;
-  max-width:100%;
 }
-.dots button{
-  width:7px;
-  height:7px;
-  border-radius:50%;
-  border:none;
-  background:var(--sálvia-clara);
-  cursor:pointer;
-  padding:0;
-  transition:background .25s ease, transform .25s ease;
-}
-.dots button.active{
-  background:var(--rosa);
-  transform:scale(1.3);
+.dots-hint span{
+  font-size:.78rem;
+  color:var(--sálvia);
+  font-weight:500;
 }
 
-@media(max-width:520px){
-  .nav-btn{width:38px;height:38px;}
-  .nav-btn svg{width:16px;height:16px;}
-  .slide .body{padding:18px 20px 22px;}
-  .slide h3{font-size:1.05rem;}
+@media(min-width:500px){
+  .nav-btn{width:46px;height:46px;}
+}
+@media(max-width:360px){
+  .carousel{border-radius:20px;}
+  .caption-slide{padding:16px 18px 20px;}
 }
 </style>
 </head>
@@ -173,18 +261,25 @@ h1,h2,h3{font-family:'Fraunces',serif;font-weight:600;margin:0;color:var(--verde
     <h1>Passe e conheça nossos buquês</h1>
   </div>
 
-  <div class="carousel">
-    <div class="track" id="track"></div>
-    <button class="nav-btn prev" id="prevBtn" aria-label="Anterior">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
-    </button>
-    <button class="nav-btn next" id="nextBtn" aria-label="Próximo">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 18l6-6-6-6"/></svg>
-    </button>
+  <div class="carousel" id="carousel">
+    <div class="stage" id="stage">
+      <div class="img-track" id="imgTrack"></div>
+      <button class="nav-btn prev" id="prevBtn" aria-label="Anterior">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="nav-btn next" id="nextBtn" aria-label="Próximo">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+    <div class="caption-viewport" id="captionViewport">
+      <div class="caption-track" id="captionTrack"></div>
+    </div>
   </div>
 
-  <div class="counter" id="counter"></div>
-  <div class="dots" id="dots"></div>
+  <div class="meta-row">
+    <div class="counter" id="counter"></div>
+    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
 </div>
 
 <script>
@@ -316,52 +411,60 @@ function money(v){
   return v.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
 }
 
-const track = document.getElementById('track');
-const dotsWrap = document.getElementById('dots');
+const imgTrack = document.getElementById('imgTrack');
+const captionTrack = document.getElementById('captionTrack');
+const captionViewport = document.getElementById('captionViewport');
+const stage = document.getElementById('stage');
 const counter = document.getElementById('counter');
+const progressBar = document.getElementById('progressBar');
+const total = PRODUCTS.length;
 let index = 0;
 
-track.innerHTML = PRODUCTS.map(p => `
-  <div class="slide">
-    <div class="imgwrap">
-      <img src="${p.img}" alt="${p.n} - Floricultura Alecrim" loading="lazy">
-      <div class="price-tag">${p.p === null ? 'Sob consulta' : 'R$ ' + money(p.p)}</div>
-    </div>
-    <div class="body">
-      <h3>${p.n}</h3>
-      <p>${p.d}</p>
-    </div>
+imgTrack.innerHTML = PRODUCTS.map(p => `
+  <div class="img-slide">
+    <img src="${p.img}" alt="${p.n} - Floricultura Alecrim" loading="lazy" decoding="async">
+    <div class="price-tag">${p.p === null ? 'Sob consulta' : 'R$ ' + money(p.p)}</div>
   </div>
 `).join('');
 
-// dots limited/grouped visually if too many — keep simple thin dots
-dotsWrap.innerHTML = PRODUCTS.map((_, i) => `<button data-i="${i}" aria-label="Ir para item ${i+1}"></button>`).join('');
-const dotButtons = dotsWrap.querySelectorAll('button');
+captionTrack.innerHTML = PRODUCTS.map(p => `
+  <div class="caption-slide">
+    <h3>${p.n}</h3>
+    <p>${p.d}</p>
+  </div>
+`).join('');
 
-function update(){
-  track.style.transform = `translateX(-${index * 100}%)`;
-  counter.textContent = `${index + 1} / ${PRODUCTS.length}`;
-  dotButtons.forEach((b, i) => b.classList.toggle('active', i === index));
-  dotButtons[index].scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
+const captionSlides = captionTrack.querySelectorAll('.caption-slide');
+
+function setCaptionHeight(){
+  captionViewport.style.height = captionSlides[index].offsetHeight + 'px';
+}
+
+function update(instant){
+  const prevTransition = imgTrack.style.transition;
+  if (instant){
+    imgTrack.style.transition = 'none';
+    captionTrack.style.transition = 'none';
+  }
+  imgTrack.style.transform = `translateX(-${index * 100}%)`;
+  captionTrack.style.transform = `translateX(-${index * 100}%)`;
+  if (instant){
+    void imgTrack.offsetWidth; // force reflow before restoring transition
+    imgTrack.style.transition = prevTransition;
+    captionTrack.style.transition = prevTransition;
+  }
+  counter.textContent = `${index + 1} / ${total}`;
+  progressBar.style.width = `${((index + 1) / total) * 100}%`;
+  setCaptionHeight();
 }
 
 function goTo(i){
-  index = (i + PRODUCTS.length) % PRODUCTS.length;
+  index = (i + total) % total;
   update();
 }
 
 document.getElementById('nextBtn').addEventListener('click', () => goTo(index + 1));
 document.getElementById('prevBtn').addEventListener('click', () => goTo(index - 1));
-dotButtons.forEach(b => b.addEventListener('click', () => goTo(Number(b.dataset.i))));
-
-// swipe support
-let startX = 0;
-track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive:true});
-track.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - startX;
-  if (dx > 50) goTo(index - 1);
-  else if (dx < -50) goTo(index + 1);
-}, {passive:true});
 
 // keyboard support
 document.addEventListener('keydown', e => {
@@ -369,7 +472,54 @@ document.addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft') goTo(index - 1);
 });
 
-update();
+// unified pointer support: touch (mobile) + mouse drag (desktop)
+let dragging = false;
+let startX = 0;
+let deltaX = 0;
+
+function dragStart(x){
+  dragging = true;
+  startX = x;
+  deltaX = 0;
+  imgTrack.style.transition = 'none';
+  captionTrack.style.transition = 'none';
+}
+function dragMove(x){
+  if (!dragging) return;
+  deltaX = x - startX;
+  const stageWidth = stage.getBoundingClientRect().width;
+  const pct = (deltaX / stageWidth) * 100;
+  imgTrack.style.transform = `translateX(calc(-${index * 100}% + ${pct}%))`;
+  captionTrack.style.transform = `translateX(calc(-${index * 100}% + ${pct}%))`;
+}
+function dragEnd(){
+  if (!dragging) return;
+  dragging = false;
+  imgTrack.style.transition = '';
+  captionTrack.style.transition = '';
+  const stageWidth = stage.getBoundingClientRect().width;
+  const threshold = stageWidth * 0.15;
+  if (deltaX > threshold) goTo(index - 1);
+  else if (deltaX < -threshold) goTo(index + 1);
+  else update();
+  deltaX = 0;
+}
+
+stage.addEventListener('touchstart', e => dragStart(e.touches[0].clientX), {passive:true});
+stage.addEventListener('touchmove', e => dragMove(e.touches[0].clientX), {passive:true});
+stage.addEventListener('touchend', dragEnd);
+
+stage.addEventListener('mousedown', e => { e.preventDefault(); dragStart(e.clientX); });
+window.addEventListener('mousemove', e => dragMove(e.clientX));
+window.addEventListener('mouseup', dragEnd);
+stage.style.cursor = 'grab';
+stage.addEventListener('mousedown', () => stage.style.cursor = 'grabbing');
+window.addEventListener('mouseup', () => stage.style.cursor = 'grab');
+
+// keep caption height correct on resize
+window.addEventListener('resize', setCaptionHeight);
+
+update(true);
 </script>
 </body>
 </html>
