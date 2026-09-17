@@ -424,7 +424,7 @@ let index = 0;
 
 imgTrack.innerHTML = PRODUCTS.map(p => `
   <div class="img-slide">
-    <img src="assets/${p.img}" alt="${p.n} - Floricultura Alecrim" loading="lazy" decoding="async">
+   <img src="${p.img}" alt="${p.n} - Floricultura Alecrim" loading="lazy" decoding="async">
     <div class="price-tag">${p.p === null ? 'Sob consulta' : 'R$ ' + money(p.p)}</div>
   </div>
 `).join('');
